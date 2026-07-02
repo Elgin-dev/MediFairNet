@@ -48,31 +48,6 @@ MediFairNet completely re-engineers this pipeline. It actively scrubs demographi
 ## 🗺️ System Architecture
 
 Our end-to-end processing pipeline runs through a four-stage neural stack:
-[Chest X-Ray / Manifest]
-│
-▼
-┌─────────────────────────────────┐
-│     Stage 1: OOD Gatekeeper     │ ──► (Fails: 422 Bad Request Warning)
-└─────────────────────────────────┘
-│ Pass
-▼
-┌─────────────────────────────────┐
-│ Stage 2: Feature Disentangle    │ ◄──► [Adversarial Domain Classifier]
-│     (z_spec vs. z_agn spaces)   │       (Explodes demographic penalty)
-└─────────────────────────────────┘
-│ Clean Clinical Features (z_spec)
-▼
-┌─────────────────────────────────┐
-│     Stage 3: Text Fusion        │ ◄─── [BioBERT Cross-Attention Node]
-└─────────────────────────────────┘
-│ Multi-Modal Tensors
-▼
-┌─────────────────────────────────┐
-│  Stage 4: Trust Calibration     │ ──► [Monte Carlo Dropout (10 Loops)]
-└─────────────────────────────────┘
-│
-▼
-[Dual-Engine Diagnostic Interface: Risk Distribution + Uncertainty Safety Bars]
 
 1. **OOD Gatekeeper:** A structural pixel-variance and symmetry engine that instantly intercepts non-radiographic assets (e.g., text documents, screenshots) before downstream weights are corrupted.
 2. **Adversarial Disentanglement:** Splits attributes into orthogonal spaces: $z_{\text{agn}}$ (demographic noise) and $z_{\text{spec}}$ (clinical signatures). An internal Domain Classifier plays a minimax game against our encoder—inflicting a penalty if demographic data leaks, enforcing demographic blindness.
